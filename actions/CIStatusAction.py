@@ -1,0 +1,2 @@
+class CIStatusAction:
+    pass

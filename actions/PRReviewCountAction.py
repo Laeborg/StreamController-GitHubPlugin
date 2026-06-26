@@ -1,0 +1,2 @@
+class PRReviewCountAction:
+    pass

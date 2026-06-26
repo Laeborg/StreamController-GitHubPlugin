@@ -1,0 +1,15 @@
+{
+    "id": "com_laeborg_GitHubPlugin",
+    "name": "GitHub Plugin (Laeborg)",
+    "version": "0.1.0",
+    "minimum-app-version": "1.5.0-beta.14",
+    "app-version": "1.5.0-beta.14",
+    "github": "https://github.com/laeborg/StreamController-GitHubPlugin",
+    "descriptions": {
+        "en_US": "Live GitHub PR review count, CI failure status, and screen strip summary."
+    },
+    "short-descriptions": {
+        "en_US": "GitHub PRs, CI status, screen summary."
+    },
+    "tags": ["GitHub", "Productivity", "CI"]
+}
