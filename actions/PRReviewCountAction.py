@@ -1,4 +1,3 @@
-from loguru import logger as log
 from src.backend.PluginManager.ActionCore import ActionCore
 
 import gi
@@ -26,6 +25,17 @@ class PRReviewCountAction(ActionCore):
         else:
             self.set_background_color([180, 180, 0, 255])
         self.set_center_label(str(count))
+
+    def get_supported_inputs(self):
+        from src.backend.PluginManager.ActionInputSupport import ActionInputSupport
+        from src.backend.DeckManagement.InputIdentifier import Input
+        return {
+            Input.Key: ActionInputSupport.SUPPORTED,
+            Input.Dial: ActionInputSupport.UNSUPPORTED,
+            Input.Touchscreen: ActionInputSupport.UNSUPPORTED,
+            Input.TouchKey: ActionInputSupport.UNSUPPORTED,
+            Input.Screen: ActionInputSupport.UNSUPPORTED,
+        }
 
     def on_key_down(self):
         self.plugin_base.force_poll()

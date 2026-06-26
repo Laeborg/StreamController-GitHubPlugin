@@ -1,4 +1,3 @@
-from loguru import logger as log
 from src.backend.PluginManager.ActionCore import ActionCore
 
 import gi
@@ -26,6 +25,17 @@ class CIStatusAction(ActionCore):
         else:
             self.set_background_color([180, 0, 0, 255])
         self.set_center_label(str(count))
+
+    def get_supported_inputs(self):
+        from src.backend.PluginManager.ActionInputSupport import ActionInputSupport
+        from src.backend.DeckManagement.InputIdentifier import Input
+        return {
+            Input.Key: ActionInputSupport.SUPPORTED,
+            Input.Dial: ActionInputSupport.UNSUPPORTED,
+            Input.Touchscreen: ActionInputSupport.UNSUPPORTED,
+            Input.TouchKey: ActionInputSupport.UNSUPPORTED,
+            Input.Screen: ActionInputSupport.UNSUPPORTED,
+        }
 
     def __del__(self):
         if self._timer_id is not None:
