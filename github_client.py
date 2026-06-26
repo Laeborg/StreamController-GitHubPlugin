@@ -37,6 +37,7 @@ class GitHubClient:
                 timeout=_TIMEOUT,
             )
             if r.status_code != 200:
+                log.warning(f"GitHubPlugin: search API HTTP {r.status_code}")
                 return 0
             items = r.json().get("items", [])
             failures = 0
@@ -59,6 +60,7 @@ class GitHubClient:
                     timeout=_TIMEOUT,
                 )
                 if runs_r.status_code != 200:
+                    log.warning(f"GitHubPlugin: check-runs HTTP {runs_r.status_code} for {sha}")
                     continue
                 conclusions = [
                     run.get("conclusion")

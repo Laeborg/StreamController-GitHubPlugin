@@ -1,5 +1,4 @@
 import threading
-import time
 from loguru import logger as log
 
 from src.backend.PluginManager.PluginBase import PluginBase
@@ -27,8 +26,10 @@ class GitHubPlugin(PluginBase):
             "ci_failure_count": 0,
             "last_error": None,
         }
+        self._cache_lock = threading.Lock()
         self._poll_thread = None
         self._stop_event = threading.Event()
+        self._polling = threading.Event()
 
         key_only = {
             Input.Key: ActionInputSupport.SUPPORTED,
@@ -99,14 +100,25 @@ class GitHubPlugin(PluginBase):
             self._stop_event.wait(POLL_INTERVAL)
 
     def _do_poll(self):
-        client = self._get_client()
-        if client is None:
-            return
-        self.cache["pr_review_count"] = client.get_pr_review_count()
-        self.cache["ci_failure_count"] = client.get_ci_failure_count()
-        log.info(f"GitHubPlugin: cache updated: {self.cache}")
+        self._polling.set()
+        try:
+            client = self._get_client()
+            if client is None:
+                return
+            # Assemble new cache dict, then atomic replacement (CPython dict assignment is GIL-protected)
+            new_cache = {
+                "pr_review_count": client.get_pr_review_count(),
+                "ci_failure_count": client.get_ci_failure_count(),
+                "last_error": None,
+            }
+            self.cache = new_cache
+            log.info(f"GitHubPlugin: cache updated: {self.cache}")
+        finally:
+            self._polling.clear()
 
     def force_poll(self):
+        if self._polling.is_set():
+            return
         threading.Thread(target=self._do_poll, daemon=True).start()
 
     def on_uninstall(self):
