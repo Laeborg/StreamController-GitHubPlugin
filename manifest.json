@@ -11,5 +11,6 @@
     "short-descriptions": {
         "en_US": "GitHub PRs, CI status, screen summary."
     },
-    "tags": ["GitHub", "Productivity", "CI"]
+    "tags": ["GitHub", "Productivity", "CI"],
+    "thumbnail": "assets/thumbnail.png"
 }
