@@ -13,7 +13,10 @@ class OpenGitHubAction(ActionCore):
     def on_key_down(self):
         settings = self.get_settings()
         url = settings.get("url", "https://github.com")
-        subprocess.run(["xdg-open", url])
+        try:
+            subprocess.run(["xdg-open", url], timeout=5)
+        except subprocess.TimeoutExpired:
+            pass
 
     def get_supported_inputs(self):
         from src.backend.PluginManager.ActionInputSupport import ActionInputSupport

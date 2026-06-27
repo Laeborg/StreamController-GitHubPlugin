@@ -14,7 +14,11 @@ class GHCommandAction(ActionCore):
     def on_key_down(self):
         settings = self.get_settings()
         command = settings.get("command", "gh pr list")
-        result = subprocess.run(command.split(), capture_output=True)
+        try:
+            result = subprocess.run(command.split(), capture_output=True, timeout=15)
+        except subprocess.TimeoutExpired:
+            self.set_center_label("TIMEOUT")
+            return
         if result.returncode == 0:
             self.set_center_label("OK")
         else:

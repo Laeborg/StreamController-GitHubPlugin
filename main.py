@@ -26,7 +26,6 @@ class GitHubPlugin(PluginBase):
             "ci_failure_count": 0,
             "last_error": None,
         }
-        self._cache_lock = threading.Lock()
         self._poll_thread = None
         self._stop_event = threading.Event()
         self._polling = threading.Event()

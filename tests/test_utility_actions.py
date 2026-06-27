@@ -122,13 +122,13 @@ class TestOpenGitHubAction:
         action = _make_open_github_action()
         with patch("subprocess.run") as mock_run:
             action.on_key_down()
-        mock_run.assert_called_once_with(["xdg-open", "https://github.com"])
+        mock_run.assert_called_once_with(["xdg-open", "https://github.com"], timeout=5)
 
     def test_on_key_down_uses_custom_url_from_settings(self):
         action = _make_open_github_action(settings={"url": "https://github.com/myorg"})
         with patch("subprocess.run") as mock_run:
             action.on_key_down()
-        mock_run.assert_called_once_with(["xdg-open", "https://github.com/myorg"])
+        mock_run.assert_called_once_with(["xdg-open", "https://github.com/myorg"], timeout=5)
 
 
 # ---------------------------------------------------------------------------
@@ -142,7 +142,7 @@ class TestGHCommandAction:
         mock_result.returncode = 0
         with patch("subprocess.run", return_value=mock_result) as mock_run:
             action.on_key_down()
-        mock_run.assert_called_once_with(["gh", "pr", "list"], capture_output=True)
+        mock_run.assert_called_once_with(["gh", "pr", "list"], capture_output=True, timeout=15)
 
     def test_on_key_down_sets_ok_label_on_success(self):
         action = _make_gh_command_action()
